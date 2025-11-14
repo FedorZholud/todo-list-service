@@ -3,6 +3,7 @@ package com.github.fedorzholud.todolistservice.todo.application.port.out
 import com.github.fedorzholud.todolistservice.todo.domain.Todo
 import com.github.fedorzholud.todolistservice.todo.domain.TodoId
 import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
+import java.time.OffsetDateTime
 
 /**
  * Repository port for accessing and modifying to-do aggregates.
@@ -39,4 +40,14 @@ interface TodoRepository {
      * @return a set containing all matching Todos
      */
     fun todos(status: TodoStatus?): Set<Todo>
+
+    /**
+     * Retrieves all to-do aggregates that match the given status and whose `dueDatetime`
+     * lies strictly before the specified timestamp.
+     *
+     * @param status the status that returned to-dos must currently have (e.g., [TodoStatus.NOT_DONE])
+     * @param timeBefore the upper bound on the `dueDatetime`; only items with a dueDatetime earlier than this value are returned
+     * @return a set of all to-dos whose status matches the given value and whose dueDatetime is before the specified timestamp
+     */
+    fun todosByStatusAndDueDatetimeBefore(status: TodoStatus, timeBefore: OffsetDateTime): Set<Todo>
 }

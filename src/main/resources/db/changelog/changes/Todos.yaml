@@ -37,3 +37,20 @@ databaseChangeLog:
       rollback:
         - dropTable:
             tableName: todos
+
+  - changeSet:
+      id: 2
+      author: fedorzholud
+      changes:
+        - createIndex:
+            tableName: todos
+            indexName: idx_todos_status_due_datetime
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: due_datetime
+      rollback:
+        - dropIndex:
+            tableName: todos
+            indexName: idx_todos_status_due_datetime

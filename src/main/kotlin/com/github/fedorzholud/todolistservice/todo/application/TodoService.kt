@@ -12,6 +12,7 @@ import java.time.OffsetDateTime
 @Service
 @Transactional
 class TodoService(private val todoRepository: TodoRepository) : TodoFacade {
+
     override fun createTodo(command: CreateTodoCommand): TodoId {
         val now = OffsetDateTime.now()
 

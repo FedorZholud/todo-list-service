@@ -7,6 +7,7 @@ import com.github.fedorzholud.todolistservice.todo.domain.Todo
 import com.github.fedorzholud.todolistservice.todo.domain.TodoId
 import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 import org.springframework.stereotype.Component
+import java.time.OffsetDateTime
 
 @Component
 class TodoPersistenceAdapter(private val todoJpaRepository: TodoJpaRepository) : TodoRepository {
@@ -27,4 +28,9 @@ class TodoPersistenceAdapter(private val todoJpaRepository: TodoJpaRepository) :
 
         return entities.map { it.toDomain() }.toSet()
     }
+
+    override fun todosByStatusAndDueDatetimeBefore(status: TodoStatus, timeBefore: OffsetDateTime): Set<Todo> =
+        todoJpaRepository.findAllByStatusAndDueDatetimeBefore(status, timeBefore)
+            .map { it.toDomain() }
+            .toSet()
 }
