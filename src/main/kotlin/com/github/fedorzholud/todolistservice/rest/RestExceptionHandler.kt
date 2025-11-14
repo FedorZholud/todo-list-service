@@ -1,6 +1,7 @@
 package com.github.fedorzholud.todolistservice.rest
 
 import com.github.fedorzholud.todolistservice.todo.domain.DueDatetimeCouldNotBeInPastException
+import com.github.fedorzholud.todolistservice.todo.domain.TodoNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -18,5 +19,14 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
                 message = exception.message ?: "Due datetime ${exception.dueDatetime} could not be in the past"
             ),
             HttpStatus.INTERNAL_SERVER_ERROR
+        )
+
+    @ExceptionHandler(TodoNotFoundException::class)
+    private fun handleTodoNotFoundException(exception: TodoNotFoundException): ResponseEntity<ErrorDto> =
+        ResponseEntity(
+            ErrorDto(
+                message = exception.message ?: "Todo with id: ${exception.todoId.value} could not be found"
+            ),
+            HttpStatus.NOT_FOUND
         )
 }

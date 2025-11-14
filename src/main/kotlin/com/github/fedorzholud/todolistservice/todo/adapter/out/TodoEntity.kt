@@ -13,7 +13,7 @@ class TodoEntity(
     val id: UUID,
 
     @Column(name = "description")
-    val description: String? = null,
+    val description: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -26,5 +26,5 @@ class TodoEntity(
     val doneDatetime: OffsetDateTime? = null,
 
     @Column(name = "creation_datetime", nullable = false)
-    val creationDatetime: OffsetDateTime = OffsetDateTime.now()
+    val creationDatetime: OffsetDateTime
 )

@@ -3,10 +3,7 @@ package com.github.fedorzholud.todolistservice.todo.application
 import com.github.fedorzholud.todolistservice.todo.application.port.`in`.CreateTodoCommand
 import com.github.fedorzholud.todolistservice.todo.application.port.`in`.TodoFacade
 import com.github.fedorzholud.todolistservice.todo.application.port.out.TodoRepository
-import com.github.fedorzholud.todolistservice.todo.domain.DueDatetimeCouldNotBeInPastException
-import com.github.fedorzholud.todolistservice.todo.domain.Todo
-import com.github.fedorzholud.todolistservice.todo.domain.TodoId
-import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
+import com.github.fedorzholud.todolistservice.todo.domain.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
@@ -33,4 +30,13 @@ class TodoService(private val todoRepository: TodoRepository) : TodoFacade {
         todoRepository.saveTodo(todo)
         return todo.id
     }
+
+    override fun todoById(todoId: TodoId): Todo =
+        todoRepository.todoById(todoId) ?: throw TodoNotFoundException(
+            todoId = todoId,
+            message = "Todo with id: ${todoId.value} could not be found"
+        )
+
+    override fun todos(status: TodoStatus?): Set<Todo> =
+        todoRepository.todos(status)
 }

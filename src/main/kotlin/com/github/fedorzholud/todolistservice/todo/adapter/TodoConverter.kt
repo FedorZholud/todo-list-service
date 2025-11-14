@@ -1,6 +1,7 @@
 package com.github.fedorzholud.todolistservice.todo.adapter
 
 import com.github.fedorzholud.todolistservice.todo.adapter.`in`.CreateTodoDto
+import com.github.fedorzholud.todolistservice.todo.adapter.`in`.TodoDto
 import com.github.fedorzholud.todolistservice.todo.adapter.out.TodoEntity
 import com.github.fedorzholud.todolistservice.todo.application.port.`in`.CreateTodoCommand
 import com.github.fedorzholud.todolistservice.todo.domain.Todo
@@ -10,6 +11,16 @@ fun CreateTodoDto.toCommand(): CreateTodoCommand =
     CreateTodoCommand(
         description = this.description,
         dueDatetime = this.dueDatetime
+    )
+
+fun Todo.toDto(): TodoDto =
+    TodoDto(
+        id = this.id.value,
+        description = this.description,
+        status = this.status.value,
+        dueDatetime = this.dueDatetime,
+        doneDatetime = this.doneDatetime,
+        creationDatetime = this.creationDatetime,
     )
 
 fun TodoEntity.toDomain(): Todo =
@@ -28,4 +39,5 @@ fun Todo.toEntity(): TodoEntity =
         description = this.description,
         status = this.status,
         dueDatetime = this.dueDatetime,
+        creationDatetime = this.creationDatetime,
     )

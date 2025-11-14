@@ -1,6 +1,8 @@
 package com.github.fedorzholud.todolistservice.todo.application.port.`in`
 
+import com.github.fedorzholud.todolistservice.todo.domain.Todo
 import com.github.fedorzholud.todolistservice.todo.domain.TodoId
+import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 import java.time.OffsetDateTime
 
 /**
@@ -20,8 +22,26 @@ interface TodoFacade {
      * Creates a new Todo item using the provided command.
      *
      * @param command [CreateTodoCommand] - the data required to create a new Todo item
+     * @throws DueDatetimeCouldNotBeInPastException if due datetime is in the past
      */
     fun createTodo(command: CreateTodoCommand): TodoId
+
+    /**
+     * Retrieves a Todo item by its unique identifier.
+     *
+     * @param todoId [TodoId] - the identifier of the Todo to retrieve
+     * @return the matching Todo aggregate
+     * @throws TodoNotFoundException if no item exists with the given identifier
+     */
+    fun todoById(todoId: TodoId): Todo
+
+    /**
+     * Retrieves Todo items filtered by their status.
+     *
+     * @param status [TodoStatus] - optional status filter; if null, all Todos are returned
+     * @return a set containing all matching Todos
+     */
+    fun todos(status: TodoStatus?): Set<Todo>
 }
 
 /**

@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class Todo(
     val id: TodoId = TodoId(),
-    val description: String?,
+    val description: String,
     val status: TodoStatus,
     val dueDatetime: OffsetDateTime,
     val doneDatetime: OffsetDateTime? = null,

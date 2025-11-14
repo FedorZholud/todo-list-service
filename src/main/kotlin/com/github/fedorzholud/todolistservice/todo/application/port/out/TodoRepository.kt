@@ -1,6 +1,8 @@
 package com.github.fedorzholud.todolistservice.todo.application.port.out
 
 import com.github.fedorzholud.todolistservice.todo.domain.Todo
+import com.github.fedorzholud.todolistservice.todo.domain.TodoId
+import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 
 /**
  * Repository port for accessing and modifying Todo aggregates.
@@ -20,4 +22,20 @@ interface TodoRepository {
      * @param todo [Todo] - the Todo aggregate to persist
      */
     fun saveTodo(todo: Todo)
+
+    /**
+     * Retrieves a single Todo aggregate by its identifier.
+     *
+     * @param todoId [TodoId] - the identifier of the Todo to receive
+     * @return the Todo if found, or `null` if no Todo exists with the given id
+     */
+    fun todoById(todoId: TodoId): Todo?
+
+    /**
+     * Retrieves all Todo aggregates, optionally filtered by their current status.
+     *
+     * @param status [TodoStatus] - optional status filter; if null, all Todos are returned
+     * @return a set containing all matching Todos
+     */
+    fun todos(status: TodoStatus?): Set<Todo>
 }
