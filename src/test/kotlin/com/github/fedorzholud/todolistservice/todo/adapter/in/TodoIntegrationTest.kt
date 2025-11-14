@@ -121,4 +121,37 @@ class TodoIntegrationTest {
         assertThat(todoDtos.size).isEqualTo(2)
         assertThat(todoDtos.map { it.id }.toSet()).contains(todoId1.value, todoId2.value)
     }
+
+    @Test
+    fun `PATCH api-todos-id should update description and status to DONE`() {
+        // Arrange
+        val command = createTestCreateTodoCommand()
+        val todoId = todoFacade.createTodo(command)
+        val todo = todoFacade.todoById(todoId)
+        val updateDto = UpdateTodoDto(
+            description = "Updated description",
+            status = TodoStatus.DONE
+        )
+
+        // Act
+        val mvcResult = mockMvc.perform(
+            patch("/api/todos/{id}", todoId.value)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDto))
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val body = mvcResult.response.contentAsString
+        val updatedDto: TodoDto = objectMapper.readValue(body, TodoDto::class.java)
+
+        // Assert
+        assertThat(updatedDto.id).isEqualTo(todoId.value)
+        assertThat(updatedDto.description).isEqualTo(updateDto.description)
+        assertThat(updatedDto.status).isEqualTo(updateDto.status?.value)
+        assertThat(updatedDto.doneDatetime).isNotNull
+        assertThat(updatedDto.dueDatetime).isEqualTo(todo.dueDatetime)
+        assertThat(updatedDto.creationDatetime).isEqualTo(todo.creationDatetime)
+    }
 }

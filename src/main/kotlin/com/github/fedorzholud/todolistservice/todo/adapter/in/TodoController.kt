@@ -4,10 +4,12 @@ import com.github.fedorzholud.todolistservice.todo.adapter.toCommand
 import com.github.fedorzholud.todolistservice.todo.adapter.toDto
 import com.github.fedorzholud.todolistservice.todo.application.port.`in`.CreateTodoCommand
 import com.github.fedorzholud.todolistservice.todo.application.port.`in`.TodoFacade
+import com.github.fedorzholud.todolistservice.todo.application.port.`in`.UpdateTodoCommand
 import com.github.fedorzholud.todolistservice.todo.domain.TodoId
 import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -36,4 +38,13 @@ class TodoController(private val todoFacade: TodoFacade) {
     @GetMapping
     fun todos(@RequestParam(value = "status") status: TodoStatus?): List<TodoDto> =
         todoFacade.todos(status).map { it.toDto() }
+
+    @PatchMapping("/{id}")
+    fun updateTodo(
+        @PathVariable(value = "id", required = true) id: UUID,
+        @RequestBody updateTodoDto: UpdateTodoDto
+    ): TodoDto {
+        val command: UpdateTodoCommand = updateTodoDto.toCommand(TodoId(id))
+        return todoFacade.updateTodo(command).toDto()
+    }
 }

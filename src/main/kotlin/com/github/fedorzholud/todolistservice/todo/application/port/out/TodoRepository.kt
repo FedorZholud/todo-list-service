@@ -5,7 +5,7 @@ import com.github.fedorzholud.todolistservice.todo.domain.TodoId
 import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 
 /**
- * Repository port for accessing and modifying Todo aggregates.
+ * Repository port for accessing and modifying to-do aggregates.
  *
  * This interface defines persistence operations that the domain layer
  * requires, without exposing any infrastructure details such as JPA,
@@ -15,24 +15,25 @@ import com.github.fedorzholud.todolistservice.todo.domain.TodoStatus
 interface TodoRepository {
 
     /**
-     * Persists the given Todo aggregate.
-     * If the Todo does not yet exist in storage, it will be created.
+     * Persists the given to-do aggregate.
+     * If the to-do does not yet exist in storage, it will be created.
      * If it already exists (identified by its id), it will be updated.
      *
-     * @param todo [Todo] - the Todo aggregate to persist
+     * @param todo [Todo] - the to-do aggregate to persist
+     * @return created to-do
      */
-    fun saveTodo(todo: Todo)
+    fun saveTodo(todo: Todo): Todo
 
     /**
-     * Retrieves a single Todo aggregate by its identifier.
+     * Retrieves a single to-do aggregate by its identifier.
      *
-     * @param todoId [TodoId] - the identifier of the Todo to receive
-     * @return the Todo if found, or `null` if no Todo exists with the given id
+     * @param todoId [TodoId] - the identifier of the to-do to receive
+     * @return the to-do if found, or `null` if no to-do exists with the given id
      */
     fun todoById(todoId: TodoId): Todo?
 
     /**
-     * Retrieves all Todo aggregates, optionally filtered by their current status.
+     * Retrieves all to-do aggregates, optionally filtered by their current status.
      *
      * @param status [TodoStatus] - optional status filter; if null, all Todos are returned
      * @return a set containing all matching Todos

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component
 @Component
 class TodoPersistenceAdapter(private val todoJpaRepository: TodoJpaRepository) : TodoRepository {
 
-    override fun saveTodo(todo: Todo) {
+    override fun saveTodo(todo: Todo): Todo {
         val entity: TodoEntity = todo.toEntity()
-        todoJpaRepository.save(entity)
+        return todoJpaRepository.save(entity).toDomain()
     }
 
     override fun todoById(todoId: TodoId): Todo? =

@@ -1,7 +1,6 @@
 package com.github.fedorzholud.todolistservice.rest
 
-import com.github.fedorzholud.todolistservice.todo.domain.DueDatetimeCouldNotBeInPastException
-import com.github.fedorzholud.todolistservice.todo.domain.TodoNotFoundException
+import com.github.fedorzholud.todolistservice.todo.domain.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -28,5 +27,25 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
                 message = exception.message ?: "Todo with id: ${exception.todoId.value} could not be found"
             ),
             HttpStatus.NOT_FOUND
+        )
+
+    @ExceptionHandler(PastDueTodoModificationForbiddenException::class)
+    private fun handlePastDueTodoModificationForbiddenException(exception: PastDueTodoModificationForbiddenException): ResponseEntity<ErrorDto> =
+        ResponseEntity(
+            ErrorDto(
+                message = exception.message
+                    ?: "Todo with id ${exception.todoId.value} is in the status ${TodoStatus.PAST_DUE.value} and could not be modified"
+            ),
+            HttpStatus.FORBIDDEN
+        )
+
+    @ExceptionHandler(UpdateTodoStatusToPastDueForbiddenException::class)
+    private fun handleUpdateTodoStatusToPastDueForbiddenException(exception: UpdateTodoStatusToPastDueForbiddenException): ResponseEntity<ErrorDto> =
+        ResponseEntity(
+            ErrorDto(
+                message = exception.message
+                    ?: "Status update to ${TodoStatus.PAST_DUE.value} value for todo with id ${exception.todoId.value} is forbidden"
+            ),
+            HttpStatus.FORBIDDEN
         )
 }

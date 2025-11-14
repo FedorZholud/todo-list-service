@@ -5,7 +5,7 @@ import org.springframework.data.repository.Repository
 import java.util.UUID
 
 interface TodoJpaRepository : Repository<TodoEntity, UUID> {
-    fun save(todoEntity: TodoEntity)
+    fun save(todoEntity: TodoEntity): TodoEntity
 
     fun findById(id: UUID): TodoEntity?
 
